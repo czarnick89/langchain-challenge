@@ -1,5 +1,6 @@
 from langchain_core.prompts import PromptTemplate
 
+
 def get_assistant_prompt():
     """Return the multilingual assistant prompt template."""
     return PromptTemplate(
@@ -9,6 +10,7 @@ def get_assistant_prompt():
 User: {message}
 Assistant:"""
     )
+
 
 def get_summarizer_prompt():
     """Return the text summarizer prompt template."""
@@ -20,6 +22,7 @@ Text: {text}
 
 Summary:"""
     )
+
 
 def get_prompt_by_name(name):
     """Return the appropriate prompt template by name."""
