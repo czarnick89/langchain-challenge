@@ -1,21 +1,46 @@
-from src.chains import chat, summarize
+from src.chains import generate_and_evaluate, research_pipeline
+from src.memory import chat_with_memory, clear_session
+from src.tools import calculator, get_time, word_counter
 
-def main():
-    print("Testing Multilingual Assistant")
-    print("=" * 40)
+def test_chains():
+    print("=" * 50)
+    print("TESTING CHAINS")
+    print("=" * 50)
     
-    # Test English
-    response = chat("English", "What is the capital of France?")
-    print(f"English: {response}")
+    print("\n--- Simple Chain ---")
+    result = generate_and_evaluate("mobile app ideas")
+    print(f"Result: {result}")
     
-    # Test Spanish
-    response = chat("Spanish", "What is the capital of France?")
-    print(f"Spanish: {response}")
+    print("\n--- Research Pipeline ---")
+    result = research_pipeline("renewable energy")
+    print(f"Research: {result['research'][:100]}...")
+    print(f"Outline: {result['outline'][:100]}...")
+    print(f"Summary: {result['summary'][:100]}...")
+
+def test_memory():
+    print("\n" + "=" * 50)
+    print("TESTING MEMORY")
+    print("=" * 50)
     
-    # Test Summarizer
-    text = """LangChain is a framework designed to make it easier to build applications that are powered by large language models by providing a structured way to connect those models to prompts, data sources, tools, and application logic. Rather than treating a language model as a one-off API call, LangChain encourages you to think in terms of reusable components—such as prompt templates, output parsers, chains, and agents—that can be composed together to solve more complex, real-world problems. It sits in the middle between raw model APIs and full-fledged applications, handling a lot of the orchestration and plumbing that would otherwise be repetitive or error-prone. In practice, this means developers can focus more on what they want the application to do—like answering questions, reasoning over documents, or interacting with external systems—and less on wiring everything together from scratch each time."""
-    summary = summarize(text, "brief")
-    print(f"Summary: {summary}")
+    clear_session("demo")
+    
+    print("\n--- Conversation ---")
+    response1 = chat_with_memory("Hi, my name is Alice", "demo")
+    print(f"Bot: {response1}")
+    
+    response2 = chat_with_memory("What's my name?", "demo")
+    print(f"Bot: {response2}")
+
+def test_tools():
+    print("\n" + "=" * 50)
+    print("TESTING TOOLS")
+    print("=" * 50)
+    
+    print(f"\nCalculator: {calculator.invoke('25 * 4')}")
+    print(f"Time: {get_time.invoke('long')}")
+    print(f"Words: {word_counter.invoke('This is a test sentence')}")
 
 if __name__ == "__main__":
-    main()
+    test_tools()      # Test tools first (no AWS needed)
+    test_chains()     # Then chains
+    test_memory()     # Then memory
